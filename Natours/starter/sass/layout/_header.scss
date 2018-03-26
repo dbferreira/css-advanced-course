@@ -1,16 +1,33 @@
 .header {
-    height: 95vh;
+    height: 75vh;
     background-image: linear-gradient(
         to right bottom,
         rgba($color-primary-light, .8),
         rgba($color-primary-dark, .8)),
-    url(../img/hero.jpg);
+    url(../img/hero-small.jpg);
     background-size: cover;
     background-position: top;
     position: relative;
 
-    -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
-    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    // clip path breaks on older versions of firefox
+    @supports (clip-path: polygon(0 0)) or (-webkit-clip-path: polygon(0 0)) {
+        -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+        clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+        height: 95vh;
+    }
+
+    // On high density screens, but not on phones, use high quality image
+    // comma is an or
+    // on wide screens, use high quality image (1800px)
+    @media only screen and (min-resolution: 192dpi) and (min-width: 37.5em),
+        only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 37.5em),
+        only screen and (min-width: 112.5em)  {
+        background-image: linear-gradient(
+        to right bottom,
+        rgba($color-primary-light, .8),
+        rgba($color-primary-dark, .8)),
+        url(../img/hero.jpg);
+    }
 
     @include respond(phone) {
         -webkit-clip-path: polygon(0 0, 100% 0, 100% 85vh, 0 100%);
